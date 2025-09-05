@@ -1,7 +1,10 @@
 package com.cognizant.passfree.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -49,8 +52,9 @@ public class Customer {
     private LocalDateTime updatedByTs;
     
     // Relationships
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Account> accounts;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "acc_num", referencedColumnName = "acc_num", nullable = false, updatable = false)
+    private Account account;
     
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Preference> preferences;

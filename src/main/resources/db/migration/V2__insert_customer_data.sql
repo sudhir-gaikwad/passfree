@@ -1,6 +1,6 @@
 -- Insert one customer
-INSERT INTO customer (cust_id, name, email, phone, password, country, state, city, zip, created_by_ts, updated_by_ts) 
-VALUES ('1001', 'John Doe', 'john.doe@example.com', '+1234567890', 'password123', 'USA', 'California', 'San Francisco', '94102', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO customer (cust_id, name, email, phone, password, country, state, city, zip, acc_num, created_by_ts, updated_by_ts)
+VALUES ('1001', 'John Doe', 'john.doe@example.com', '+1234567890', 'password123', 'USA', 'California', 'San Francisco', '94102', 'ACC001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Insert one account for the customer
 INSERT INTO account (cust_id, acc_num, balance_amt, created_by_ts, updated_by_ts) 

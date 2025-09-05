@@ -1,6 +1,7 @@
 package com.cognizant.passfree.controller;
 
 import com.cognizant.passfree.model.request.LoginRequest;
+import com.cognizant.passfree.model.response.CustomerDetailsResponse;
 import com.cognizant.passfree.model.response.LoginResponse;
 import com.cognizant.passfree.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,12 @@ public class CustomerController {
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         LoginResponse response = customerService.login(loginRequest);
         return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/{customerId}")
+    public ResponseEntity<CustomerDetailsResponse> getCustomerDetails(@PathVariable String customerId) {
+        return customerService.getCustomerDetailsById(customerId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

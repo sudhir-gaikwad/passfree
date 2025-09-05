@@ -18,10 +18,7 @@ public class Account {
     @Id
     @Column(name = "acc_num", length = 50)
     private String accountNumber;
-    
-    @Column(name = "cust_id", length = 10, nullable = false)
-    private String customerId;
-    
+
     @Column(name = "balance_amt", precision = 15, scale = 2, nullable = false)
     private BigDecimal balanceAmount;
     
@@ -32,8 +29,8 @@ public class Account {
     private LocalDateTime updatedByTs;
     
     // Relationships
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cust_id", referencedColumnName = "cust_id", insertable = false, updatable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cust_id", referencedColumnName = "cust_id")
     private Customer customer;
     
     @OneToMany(mappedBy = "fromAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
