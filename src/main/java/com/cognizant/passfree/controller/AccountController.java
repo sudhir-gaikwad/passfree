@@ -1,6 +1,7 @@
 package com.cognizant.passfree.controller;
 
 import com.cognizant.passfree.model.request.TransferRequest;
+import com.cognizant.passfree.model.response.AccountResponse;
 import com.cognizant.passfree.model.response.TransferResponse;
 import com.cognizant.passfree.service.AccountService;
 import org.slf4j.Logger;
@@ -18,6 +19,33 @@ public class AccountController {
     
     @Autowired
     private AccountService accountService;
+    
+    /**
+     * Get account details by account number
+     * 
+     * @param accountNumber the account number to retrieve details for
+     * @return ResponseEntity with AccountResponse
+     */
+    @GetMapping("/{accountNumber}")
+    public ResponseEntity<AccountResponse> getAccountDetails(@PathVariable String accountNumber) {
+        logger.info("Received request for account details for account number: {}", accountNumber);
+        
+        try {
+            AccountResponse response = accountService.getAccountDetails(accountNumber);
+            
+            if (response != null) {
+                logger.info("Successfully retrieved account details for account number: {}", accountNumber);
+                return ResponseEntity.ok(response);
+            } else {
+                logger.error("Account not found for account number: {}", accountNumber);
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            logger.error("Exception occurred while fetching account details for account number {}: {}", 
+                accountNumber, e.getMessage(), e);
+            return ResponseEntity.status(500).build();
+        }
+    }
     
     /**
      * Transfer amount from source account to beneficiary account

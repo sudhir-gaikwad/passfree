@@ -3,6 +3,7 @@ package com.cognizant.passfree.service;
 import com.cognizant.passfree.entities.Account;
 import com.cognizant.passfree.entities.Beneficiary;
 import com.cognizant.passfree.entities.Transaction;
+import com.cognizant.passfree.model.response.AccountResponse;
 import com.cognizant.passfree.model.response.TransferResponse;
 import com.cognizant.passfree.repository.AccountRepository;
 import com.cognizant.passfree.repository.BeneficiaryRepository;
@@ -31,6 +32,48 @@ public class AccountService {
     
     @Autowired
     private TransactionRepository transactionRepository;
+    
+    /**
+     * Get account details by account number
+     * 
+     * @param accountNumber the account number to retrieve details for
+     * @return AccountResponse with account details
+     */
+    public AccountResponse getAccountDetails(String accountNumber) {
+        logger.info("Fetching account details for account number: {}", accountNumber);
+        
+        // Validate input parameter
+        if (accountNumber == null || accountNumber.isEmpty()) {
+            logger.error("Invalid account number provided");
+            return null;
+        }
+        
+        // Find account by account number
+        Optional<Account> accountOptional = accountRepository.findById(accountNumber);
+        if (accountOptional.isEmpty()) {
+            logger.error("Account not found for account number: {}", accountNumber);
+            return null;
+        }
+        
+        Account account = accountOptional.get();
+        
+        // Build response object
+        AccountResponse accountResponse = AccountResponse.builder()
+            .accountNumber(account.getAccountNumber())
+            .balanceAmount(account.getBalanceAmount())
+            .createdByTs(account.getCreatedByTs())
+            .updatedByTs(account.getUpdatedByTs())
+            .build();
+            
+        // Set customer details if available
+        if (account.getCustomer() != null) {
+            accountResponse.setCustomerId(account.getCustomer().getCustomerId());
+            accountResponse.setCustomerName(account.getCustomer().getName());
+        }
+        
+        logger.info("Successfully retrieved account details for account number: {}", accountNumber);
+        return accountResponse;
+    }
     
     /**
      * Transfer amount from source account to beneficiary account
