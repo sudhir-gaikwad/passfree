@@ -28,11 +28,11 @@ CREATE TABLE account (
 CREATE TABLE preference (
     cust_id VARCHAR(10) NOT NULL,
     type VARCHAR(50) NOT NULL,
+    preference_id VARCHAR(10) NOT NULL PRIMARY KEY,
     enabled BOOLEAN NOT NULL DEFAULT FALSE,
     data TEXT,
     created_by_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_by_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (cust_id, type),
     FOREIGN KEY (cust_id) REFERENCES customer(cust_id)
 );
 

@@ -11,16 +11,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@IdClass(PreferenceId.class)
 public class Preference {
     
-    @Id
     @Column(name = "cust_id", length = 10)
     private String customerId;
     
-    @Id
     @Column(name = "type", length = 50)
     private String type;
+    
+    @Id
+    @Column(name = "preference_id", length = 10)
+    private String preferenceId;
     
     @Column(name = "enabled", nullable = false)
     private Boolean enabled;

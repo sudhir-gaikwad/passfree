@@ -14,11 +14,11 @@ INSERT INTO beneficiary (cust_id, beneficiary_id, name, acc_num, country, state,
 VALUES ('1001', 'BEN002', 'Robert Johnson', 'BEN_ACC002', 'USA', 'Texas', 'Austin', '73301', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Insert three preferences for the customer (all disabled)
-INSERT INTO preference (cust_id, type, enabled, data, created_by_ts, updated_by_ts) 
-VALUES ('1001', 'TOTP', FALSE, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO preference (cust_id, type, preference_id, enabled, data, created_by_ts, updated_by_ts) 
+VALUES ('1001', 'TOTP', 'PREF001', TRUE, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO preference (cust_id, type, enabled, data, created_by_ts, updated_by_ts) 
-VALUES ('1001', 'SMS', FALSE, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO preference (cust_id, type, preference_id, enabled, data, created_by_ts, updated_by_ts) 
+VALUES ('1001', 'SMS', 'PREF002', FALSE, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO preference (cust_id, type, enabled, data, created_by_ts, updated_by_ts) 
-VALUES ('1001', 'EMAIL', FALSE, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO preference (cust_id, type, preference_id, enabled, data, created_by_ts, updated_by_ts) 
+VALUES ('1001', 'EMAIL', 'PREF003', FALSE, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
