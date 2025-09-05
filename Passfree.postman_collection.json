@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Login",
+			"name": "1 Login",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -40,7 +40,7 @@
 			"response": []
 		},
 		{
-			"name": "Get customer details",
+			"name": "2 Get customer details",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -64,7 +64,90 @@
 			"response": []
 		},
 		{
-			"name": "Get benificiary",
+			"name": "3 Get account details",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/accounts/ACC001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"accounts",
+						"ACC001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4 Get preferences",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/preferences/customer/1001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"preferences",
+						"customer",
+						"1001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5 Set preference",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerId\": \"1001\",\r\n    \"preferenceId\": \"PREF001\",\r\n    \"enabled\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/preferences/customer/preference",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"preferences",
+						"customer",
+						"preference"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6 Get benificiary",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -89,7 +172,7 @@
 			"response": []
 		},
 		{
-			"name": "Transfer",
+			"name": "7 Transfer",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -98,7 +181,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"sourceAccountNumber\": \"ACC001\",\r\n    \"beneficiaryAccountNumber\": \"BEN_ACC002\",\r\n    \"amount\": 50.00\r\n}",
+					"raw": "{\r\n    \"sourceAccountNumber\": \"ACC001\",\r\n    \"beneficiaryAccountNumber\": \"BEN_ACC002\",\r\n    \"amount\": 150.00,\r\n    \"operatingSystem\": \"Android\",\r\n    \"state\": \"\",\r\n    \"country\": \"\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -116,30 +199,6 @@
 						"api",
 						"accounts",
 						"transfer"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get account details",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/accounts/ACC001",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"accounts",
-						"ACC001"
 					]
 				}
 			},
