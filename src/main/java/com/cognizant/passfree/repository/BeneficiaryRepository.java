@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface BeneficiaryRepository extends JpaRepository<Beneficiary, String> {
     List<Beneficiary> findByCustomerId(String customerId);
+
+    List<Beneficiary> findByAccountNumber(String accountNumber);
 }
