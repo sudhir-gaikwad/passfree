@@ -1,17 +1,22 @@
 package com.cognizant.passfree.service;
 
+import com.cognizant.passfree.entities.Beneficiary;
 import com.cognizant.passfree.entities.Customer;
 import com.cognizant.passfree.model.request.LoginRequest;
+import com.cognizant.passfree.model.response.BeneficiaryResponse;
 import com.cognizant.passfree.model.response.CustomerDetailsResponse;
 import com.cognizant.passfree.model.response.LoginResponse;
 import com.cognizant.passfree.repository.AccountRepository;
+import com.cognizant.passfree.repository.BeneficiaryRepository;
 import com.cognizant.passfree.repository.CustomerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -23,6 +28,9 @@ public class CustomerService {
     
     @Autowired
     private AccountRepository accountRepository;
+    
+    @Autowired
+    private BeneficiaryRepository beneficiaryRepository;
     
     public LoginResponse login(LoginRequest loginRequest) {
         // Find customer by email and password
@@ -82,5 +90,24 @@ public class CustomerService {
         
         logger.info("Returning customer details with account number: {}", accountNumber);
         return Optional.of(customerDetailsResponse);
+    }
+    
+    public List<BeneficiaryResponse> getBeneficiariesByCustomerId(String customerId) {
+        logger.info("Fetching beneficiaries for customer ID: {}", customerId);
+        List<Beneficiary> beneficiaries = beneficiaryRepository.findByCustomerId(customerId);
+        
+        return beneficiaries.stream().map(beneficiary -> BeneficiaryResponse.builder()
+                .beneficiaryId(beneficiary.getBeneficiaryId())
+                .customerId(beneficiary.getCustomerId())
+                .name(beneficiary.getName())
+                .accountNumber(beneficiary.getAccountNumber())
+                .country(beneficiary.getCountry())
+                .state(beneficiary.getState())
+                .city(beneficiary.getCity())
+                .zip(beneficiary.getZip())
+                .createdByTs(beneficiary.getCreatedByTs())
+                .updatedByTs(beneficiary.getUpdatedByTs())
+                .build())
+                .collect(Collectors.toList());
     }
 }

@@ -1,12 +1,15 @@
 package com.cognizant.passfree.controller;
 
 import com.cognizant.passfree.model.request.LoginRequest;
+import com.cognizant.passfree.model.response.BeneficiaryResponse;
 import com.cognizant.passfree.model.response.CustomerDetailsResponse;
 import com.cognizant.passfree.model.response.LoginResponse;
 import com.cognizant.passfree.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -27,5 +30,11 @@ public class CustomerController {
         return customerService.getCustomerDetailsById(customerId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+    
+    @GetMapping("/{customerId}/beneficiaries")
+    public ResponseEntity<List<BeneficiaryResponse>> getBeneficiaries(@PathVariable String customerId) {
+        List<BeneficiaryResponse> beneficiaries = customerService.getBeneficiariesByCustomerId(customerId);
+        return ResponseEntity.ok(beneficiaries);
     }
 }
