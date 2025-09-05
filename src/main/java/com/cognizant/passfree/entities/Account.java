@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,12 @@ public class Account {
     
     @Column(name = "balance_amt", precision = 15, scale = 2, nullable = false)
     private BigDecimal balanceAmount;
+    
+    @Column(name = "created_by_ts")
+    private LocalDateTime createdByTs;
+    
+    @Column(name = "updated_by_ts")
+    private LocalDateTime updatedByTs;
     
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)

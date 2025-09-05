@@ -3,6 +3,7 @@ package com.cognizant.passfree.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -40,6 +41,12 @@ public class Customer {
     
     @Column(name = "zip", length = 20)
     private String zip;
+    
+    @Column(name = "created_by_ts")
+    private LocalDateTime createdByTs;
+    
+    @Column(name = "updated_by_ts")
+    private LocalDateTime updatedByTs;
     
     // Relationships
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

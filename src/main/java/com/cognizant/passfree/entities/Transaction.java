@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transaction")
@@ -44,6 +45,12 @@ public class Transaction {
     
     @Column(name = "otp", length = 10)
     private String otp;
+    
+    @Column(name = "created_by_ts")
+    private LocalDateTime createdByTs;
+    
+    @Column(name = "updated_by_ts")
+    private LocalDateTime updatedByTs;
     
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)

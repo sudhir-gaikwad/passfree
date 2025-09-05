@@ -3,6 +3,8 @@ package com.cognizant.passfree.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "beneficiary")
 @Data
@@ -35,6 +37,12 @@ public class Beneficiary {
     
     @Column(name = "zip", length = 20)
     private String zip;
+    
+    @Column(name = "created_by_ts")
+    private LocalDateTime createdByTs;
+    
+    @Column(name = "updated_by_ts")
+    private LocalDateTime updatedByTs;
     
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)

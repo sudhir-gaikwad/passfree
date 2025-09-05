@@ -8,7 +8,9 @@ CREATE TABLE customer (
     country VARCHAR(100),
     state VARCHAR(100),
     city VARCHAR(100),
-    zip VARCHAR(20)
+    zip VARCHAR(20),
+    created_by_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_by_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- Create account table
@@ -16,6 +18,8 @@ CREATE TABLE account (
     cust_id VARCHAR(10) NOT NULL,
     acc_num VARCHAR(50) PRIMARY KEY,
     balance_amt DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+    created_by_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_by_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (cust_id) REFERENCES customer(cust_id)
 );
 
@@ -25,6 +29,8 @@ CREATE TABLE preference (
     type VARCHAR(50) NOT NULL,
     enabled BOOLEAN NOT NULL DEFAULT FALSE,
     data TEXT,
+    created_by_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_by_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (cust_id, type),
     FOREIGN KEY (cust_id) REFERENCES customer(cust_id)
 );
@@ -39,6 +45,8 @@ CREATE TABLE beneficiary (
     state VARCHAR(100),
     city VARCHAR(100),
     zip VARCHAR(20),
+    created_by_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_by_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (beneficiary_id),
     FOREIGN KEY (cust_id) REFERENCES customer(cust_id)
 );
@@ -55,6 +63,8 @@ CREATE TABLE transaction (
     status VARCHAR(50) NOT NULL,
     mfa_type VARCHAR(50),
     otp VARCHAR(10),
+    created_by_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_by_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (cust_id) REFERENCES customer(cust_id),
     FOREIGN KEY (from_acc_num) REFERENCES account(acc_num)
