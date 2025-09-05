@@ -1,5 +1,6 @@
 package com.cognizant.passfree.controller;
 
+import com.cognizant.passfree.model.TransactionStatus;
 import com.cognizant.passfree.model.request.TransferRequest;
 import com.cognizant.passfree.model.response.AccountResponse;
 import com.cognizant.passfree.model.response.TransferResponse;
@@ -50,22 +51,26 @@ public class AccountController {
     /**
      * Transfer amount from source account to beneficiary account
      * 
-     * @param transferRequest the transfer request containing source account, beneficiary account and amount
+     * @param transferRequest the transfer request containing source account, beneficiary account, amount, and additional details
      * @return ResponseEntity with TransferResponse
      */
     @PostMapping("/transfer")
     public ResponseEntity<TransferResponse> transferAmount(@RequestBody TransferRequest transferRequest) {
         
-        logger.info("Received transfer request from account {} to account {} with amount {}", 
-            transferRequest.getSourceAccountNumber(), transferRequest.getBeneficiaryAccountNumber(), transferRequest.getAmount());
+        logger.info("Received transfer request from account {} to account {} with amount {}. OS: {}, State: {}, Country: {}", 
+            transferRequest.getSourceAccountNumber(), transferRequest.getBeneficiaryAccountNumber(), transferRequest.getAmount(),
+            transferRequest.getOperatingSystem(), transferRequest.getState(), transferRequest.getCountry());
         
         try {
             TransferResponse response = accountService.transferAmount(
                 transferRequest.getSourceAccountNumber(),
                 transferRequest.getBeneficiaryAccountNumber(),
-                transferRequest.getAmount());
+                transferRequest.getAmount(),
+                transferRequest.getOperatingSystem(),
+                transferRequest.getState(),
+                transferRequest.getCountry());
             
-            if (response.isSuccess()) {
+            if (response.getStatus() == TransactionStatus.SUCCESS) {
                 logger.info("Transfer successful from account {} to account {} with amount {}", 
                     transferRequest.getSourceAccountNumber(), transferRequest.getBeneficiaryAccountNumber(), transferRequest.getAmount());
                 return ResponseEntity.ok(response);
@@ -78,7 +83,7 @@ public class AccountController {
             logger.error("Exception occurred during transfer from account {} to account {} with amount {}: {}", 
                 transferRequest.getSourceAccountNumber(), transferRequest.getBeneficiaryAccountNumber(), transferRequest.getAmount(), e.getMessage(), e);
             TransferResponse errorResponse = TransferResponse.builder()
-                .success(false)
+                .status(TransactionStatus.FAILED)
                 .message("Internal server error")
                 .build();
             return ResponseEntity.status(500).body(errorResponse);

@@ -16,4 +16,7 @@ public class TransferRequest {
     private String sourceAccountNumber;
     private String beneficiaryAccountNumber;
     private BigDecimal amount;
+    private String operatingSystem;
+    private String state;
+    private String country;
 }

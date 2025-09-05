@@ -3,6 +3,7 @@ package com.cognizant.passfree.service;
 import com.cognizant.passfree.entities.Account;
 import com.cognizant.passfree.entities.Beneficiary;
 import com.cognizant.passfree.entities.Transaction;
+import com.cognizant.passfree.model.TransactionStatus;
 import com.cognizant.passfree.model.response.AccountResponse;
 import com.cognizant.passfree.model.response.TransferResponse;
 import com.cognizant.passfree.repository.AccountRepository;
@@ -81,12 +82,16 @@ public class AccountService {
      * @param sourceAccountNumber the account number to transfer from
      * @param beneficiaryAccountNumber the account number to transfer to
      * @param amount the amount to transfer
+     * @param operatingSystem the operating system used for the transfer
+     * @param state the state from which the transfer was initiated
+     * @param country the country from which the transfer was initiated
      * @return TransferResponse with success status and message
      */
     @Transactional
-    public TransferResponse transferAmount(String sourceAccountNumber, String beneficiaryAccountNumber, BigDecimal amount) {
-        logger.info("Initiating transfer from account {} to account {} with amount {}", 
-            sourceAccountNumber, beneficiaryAccountNumber, amount);
+    public TransferResponse transferAmount(String sourceAccountNumber, String beneficiaryAccountNumber, BigDecimal amount, 
+                                         String operatingSystem, String state, String country) {
+        logger.info("Initiating transfer from account {} to account {} with amount {}. OS: {}, State: {}, Country: {}", 
+            sourceAccountNumber, beneficiaryAccountNumber, amount, operatingSystem, state, country);
         
         // Validate input parameters
         if (sourceAccountNumber == null || sourceAccountNumber.isEmpty() || 
@@ -94,7 +99,7 @@ public class AccountService {
             amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             logger.error("Invalid input parameters for transfer");
             return TransferResponse.builder()
-                .success(false)
+                .status(TransactionStatus.FAILED)
                 .message("Invalid input parameters for transfer")
                 .build();
         }
@@ -103,7 +108,7 @@ public class AccountService {
         if (sourceAccountNumber.equals(beneficiaryAccountNumber)) {
             logger.error("Source and beneficiary accounts cannot be the same");
             return TransferResponse.builder()
-                .success(false)
+                .status(TransactionStatus.FAILED)
                 .message("Source and beneficiary accounts cannot be the same")
                 .build();
         }
@@ -113,7 +118,7 @@ public class AccountService {
         if (sourceAccountOptional.isEmpty()) {
             logger.error("Source account not found: {}", sourceAccountNumber);
             return TransferResponse.builder()
-                .success(false)
+                .status(TransactionStatus.FAILED)
                 .message("Source account not found")
                 .build();
         }
@@ -123,7 +128,7 @@ public class AccountService {
         if (beneficiaries.isEmpty()) {
             logger.error("Beneficiary not found for account number: {}", beneficiaryAccountNumber);
             return TransferResponse.builder()
-                .success(false)
+                .status(TransactionStatus.FAILED)
                 .message("Beneficiary not found for account number")
                 .build();
         }
@@ -138,7 +143,7 @@ public class AccountService {
             logger.error("Insufficient balance in source account. Available: {}, Required: {}", 
                 sourceAccount.getBalanceAmount(), amount);
             return TransferResponse.builder()
-                .success(false)
+                .status(TransactionStatus.FAILED)
                 .message("Insufficient balance in source account")
                 .build();
         }
@@ -161,7 +166,7 @@ public class AccountService {
             .amountBefore(sourceBalanceBefore)
             .amountAfter(sourceAccount.getBalanceAmount())
             .transferAmount(amount)
-            .status("SUCCESS")
+            .status(TransactionStatus.SUCCESS)
             .createdByTs(LocalDateTime.now())
             .updatedByTs(LocalDateTime.now())
             .build();
@@ -172,7 +177,7 @@ public class AccountService {
             sourceAccountNumber, beneficiaryAccountNumber, amount);
         
         return TransferResponse.builder()
-            .success(true)
+            .status(transaction.getStatus())
             .message("Transfer completed successfully")
             .transactionId(String.valueOf(savedTransaction.getId()))
             .build();

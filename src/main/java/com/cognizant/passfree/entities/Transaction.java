@@ -1,5 +1,6 @@
 package com.cognizant.passfree.entities;
 
+import com.cognizant.passfree.model.TransactionStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,8 +38,9 @@ public class Transaction {
     @Column(name = "transfer_amt", precision = 15, scale = 2, nullable = false)
     private BigDecimal transferAmount;
     
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 50, nullable = false)
-    private String status;
+    private TransactionStatus status;
     
     @Column(name = "mfa_type", length = 50)
     private String mfaType;

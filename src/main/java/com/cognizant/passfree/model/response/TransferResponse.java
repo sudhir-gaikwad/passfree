@@ -1,5 +1,6 @@
 package com.cognizant.passfree.model.response;
 
+import com.cognizant.passfree.model.TransactionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TransferResponse {
     
-    private boolean success;
+    private TransactionStatus status;
     private String message;
     private String transactionId;
 }
