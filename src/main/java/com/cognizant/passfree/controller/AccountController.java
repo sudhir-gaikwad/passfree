@@ -1,6 +1,7 @@
 package com.cognizant.passfree.controller;
 
 import com.cognizant.passfree.model.TransactionStatus;
+import com.cognizant.passfree.model.request.OTPVerificationRequest;
 import com.cognizant.passfree.model.request.TransferRequest;
 import com.cognizant.passfree.model.response.AccountResponse;
 import com.cognizant.passfree.model.response.TransferResponse;
@@ -62,16 +63,10 @@ public class AccountController {
             transferRequest.getOperatingSystem(), transferRequest.getState(), transferRequest.getCountry());
         
         try {
-            TransferResponse response = accountService.transferAmount(
-                transferRequest.getSourceAccountNumber(),
-                transferRequest.getBeneficiaryAccountNumber(),
-                transferRequest.getAmount(),
-                transferRequest.getOperatingSystem(),
-                transferRequest.getState(),
-                transferRequest.getCountry());
+            TransferResponse response = accountService.transferAmount(transferRequest);
             
-            if (response.getStatus() == TransactionStatus.SUCCESS) {
-                logger.info("Transfer successful from account {} to account {} with amount {}", 
+            if (response.getStatus() == TransactionStatus.SUCCESS || response.getStatus() == TransactionStatus.INITIATED) {
+                logger.info("Transfer processed from account {} to account {} with amount {}", 
                     transferRequest.getSourceAccountNumber(), transferRequest.getBeneficiaryAccountNumber(), transferRequest.getAmount());
                 return ResponseEntity.ok(response);
             } else {
@@ -82,6 +77,40 @@ public class AccountController {
         } catch (Exception e) {
             logger.error("Exception occurred during transfer from account {} to account {} with amount {}: {}", 
                 transferRequest.getSourceAccountNumber(), transferRequest.getBeneficiaryAccountNumber(), transferRequest.getAmount(), e.getMessage(), e);
+            TransferResponse errorResponse = TransferResponse.builder()
+                .status(TransactionStatus.FAILED)
+                .message("Internal server error")
+                .build();
+            return ResponseEntity.status(500).body(errorResponse);
+        }
+    }
+    
+    /**
+     * Verify OTP and complete the transaction
+     * 
+     * @param otpVerificationRequest the request containing transactionId and otp
+     * @return ResponseEntity with TransferResponse
+     */
+    @PostMapping("/verify-otp")
+    public ResponseEntity<TransferResponse> verifyOTPAndCompleteTransaction(@RequestBody OTPVerificationRequest otpVerificationRequest) {
+        logger.info("Received OTP verification request for transaction: {}", otpVerificationRequest.getTransactionId());
+        
+        try {
+            TransferResponse response = accountService.verifyOTPAndCompleteTransaction(
+                otpVerificationRequest.getTransactionId(), 
+                otpVerificationRequest.getOtp());
+            
+            if (response.getStatus() == TransactionStatus.SUCCESS) {
+                logger.info("OTP verification successful for transaction: {}", otpVerificationRequest.getTransactionId());
+                return ResponseEntity.ok(response);
+            } else {
+                logger.error("OTP verification failed for transaction {}: {}", 
+                    otpVerificationRequest.getTransactionId(), response.getMessage());
+                return ResponseEntity.badRequest().body(response);
+            }
+        } catch (Exception e) {
+            logger.error("Exception occurred during OTP verification for transaction: {}", 
+                otpVerificationRequest.getTransactionId(), e.getMessage(), e);
             TransferResponse errorResponse = TransferResponse.builder()
                 .status(TransactionStatus.FAILED)
                 .message("Internal server error")

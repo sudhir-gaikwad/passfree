@@ -1,6 +1,5 @@
-package com.cognizant.passfree.model.response;
+package com.cognizant.passfree.model.request;
 
-import com.cognizant.passfree.model.TransactionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TransferResponse {
+public class OTPVerificationRequest {
     
-    private TransactionStatus status;
-    private String message;
     private String transactionId;
     private String otp;
 }
