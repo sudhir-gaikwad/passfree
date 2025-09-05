@@ -1,5 +1,6 @@
 package com.cognizant.passfree.entities;
 
+import com.cognizant.passfree.model.MfaType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,8 +17,9 @@ public class Preference {
     @Column(name = "cust_id", length = 10)
     private String customerId;
     
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", length = 50)
-    private String type;
+    private MfaType type;
     
     @Id
     @Column(name = "preference_id", length = 10)

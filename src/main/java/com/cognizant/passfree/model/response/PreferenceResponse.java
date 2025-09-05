@@ -1,5 +1,6 @@
 package com.cognizant.passfree.model.response;
 
+import com.cognizant.passfree.model.MfaType;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ public class PreferenceResponse {
     
     private String customerId;
     
-    private String type;
+    private MfaType type;
     
     private String preferenceId;
     

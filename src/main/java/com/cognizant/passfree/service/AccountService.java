@@ -4,6 +4,7 @@ import com.cognizant.passfree.entities.Account;
 import com.cognizant.passfree.entities.Beneficiary;
 import com.cognizant.passfree.entities.Customer;
 import com.cognizant.passfree.entities.Transaction;
+import com.cognizant.passfree.model.MfaType;
 import com.cognizant.passfree.model.TransactionStatus;
 import com.cognizant.passfree.model.request.TransferRequest;
 import com.cognizant.passfree.model.response.AccountResponse;
@@ -160,7 +161,7 @@ public class AccountService {
                 .transferAmount(transferRequest.getAmount())
                 .status(TransactionStatus.INITIATED)
                 .otp(otp)
-                .mfaType("OTP")
+                .mfaType(MfaType.SMS)
                 .createdByTs(LocalDateTime.now())
                 .updatedByTs(LocalDateTime.now())
                 .build();
